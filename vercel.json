@@ -1,12 +1,16 @@
 {
+    "version": 2,
     "builds": [
       {
-        "src": "package.json",
-        "use": "@vercel/node"
+        "src": "Dockerfile",
+        "use": "@vercel/docker"
       }
     ],
-    "scripts": {
-      "build": "curl -s https://storage.googleapis.com/download.flutter.io/flutter_linux_v2.10.5-stable.tar.xz | tar -xJ -C /usr/local && export PATH=$PATH:/usr/local/flutter/bin && flutter doctor && flutter build web"
-    }
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/"
+      }
+    ]
   }
   
