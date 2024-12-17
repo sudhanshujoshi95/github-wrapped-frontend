@@ -55,72 +55,88 @@ class _GitHubDataScreenState extends State<GitHubDataScreen> {
   }
 
   Widget _buildProfileSlide(GitHubData data) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blue, Colors.purple],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Profile Image
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(data.profileData.avatarUrl),
-              ),
-              const SizedBox(height: 20),
-
-              // Name
-              Text(
-                data.profileData.name,
-                style: const TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const SizedBox(height: 10),
-
-              // Bio
-              Text(
-                data.profileData.bio,
-                style: const TextStyle(fontSize: 16, color: Colors.white70),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-
-              // Additional Information (Followers, Repos, etc.)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.purple],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  _buildInfoCard(Icons.people,
-                      data.profileData.followers.totalCount, 'Followers'),
-                  const SizedBox(width: 20),
-                  _buildInfoCard(Icons.folder,
-                      data.profileData.publicRepos.totalCount, 'Repos'),
+                  // Profile Image
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(data.profileData.avatarUrl),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Name
+                  Text(
+                    data.profileData.name,
+                    style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Bio
+                  Text(
+                    data.profileData.bio,
+                    style: const TextStyle(fontSize: 16, color: Colors.white70),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Additional Information (Followers, Repos, etc.)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildInfoCard(Icons.people,
+                          data.profileData.followers.totalCount, 'Followers'),
+                      const SizedBox(width: 20),
+                      _buildInfoCard(Icons.folder,
+                          data.profileData.publicRepos.totalCount, 'Repos'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Location, Company, and Other Info
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildLocationInfoCard(Icons.location_on,
+                          data.profileData.location, 'Location'),
+                      const SizedBox(width: 20),
+                    ],
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
-
-              // Location, Company, and Other Info
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildLocationInfoCard(
-                      Icons.location_on, data.profileData.location, 'Location'),
-                  const SizedBox(width: 20),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 30,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -191,154 +207,236 @@ class _GitHubDataScreenState extends State<GitHubDataScreen> {
   }
 
   Widget _buildMostActiveDaySlide(GitHubData data) {
-    return Container(
-      color: Colors.black,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.calendar_today, size: 80, color: Colors.yellow),
-            const SizedBox(height: 20),
-            const Text(
-              "Most Active Day",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+    return Stack(
+      children: [
+        Container(
+          color: Colors.black,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.calendar_today,
+                    size: 80, color: Colors.yellow),
+                const SizedBox(height: 20),
+                const Text(
+                  "Most Active Day",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  data.mostActiveDay.mostActiveDay,
+                  style: const TextStyle(fontSize: 18, color: Colors.white70),
+                ),
+                Text(
+                  "Contributions: ${data.mostActiveDay.maxContributions}",
+                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            Text(
-              data.mostActiveDay.mostActiveDay,
-              style: const TextStyle(fontSize: 18, color: Colors.white70),
-            ),
-            Text(
-              "Contributions: ${data.mostActiveDay.maxContributions}",
-              style: const TextStyle(fontSize: 16, color: Colors.white70),
-            ),
-          ],
+          ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 30,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildMostContributedRepoSlide(GitHubData data) {
-    return Container(
-      color: Colors.black,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.commit_outlined, size: 80, color: Colors.yellow),
-            const SizedBox(height: 20),
-            const Text(
-              "Most Contributions",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+    return Stack(
+      children: [
+        Container(
+          color: Colors.black,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.commit_outlined,
+                    size: 80, color: Colors.yellow),
+                const SizedBox(height: 20),
+                const Text(
+                  "Most Contributions",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  data.mostContributedRepo.mostContributedRepo,
+                  style: const TextStyle(fontSize: 18, color: Colors.white70),
+                ),
+                Text(
+                  "Commits: ${data.mostContributedRepo.maxCommits}",
+                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            Text(
-              data.mostContributedRepo.mostContributedRepo,
-              style: const TextStyle(fontSize: 18, color: Colors.white70),
-            ),
-            Text(
-              "Commits: ${data.mostContributedRepo.maxCommits}",
-              style: const TextStyle(fontSize: 16, color: Colors.white70),
-            ),
-          ],
+          ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 30,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildLanguagesSlide(GitHubData data) {
-    return SingleChildScrollView(
-      child: Container(
-        color: Colors.deepOrange,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Most Used Languages",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Container(
+            color: Colors.deepOrange,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Most Used Languages",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 20),
+                ...data.mostUsedLanguages.map((language) {
+                  return ListTile(
+                    title: Text(language.language,
+                        style: const TextStyle(color: Colors.white)),
+                    subtitle: Text("Usage Count: ${language.count}",
+                        style: const TextStyle(color: Colors.white70)),
+                  );
+                }),
+              ],
             ),
-            const SizedBox(height: 20),
-            ...data.mostUsedLanguages.map((language) {
-              return ListTile(
-                title: Text(language.language,
-                    style: const TextStyle(color: Colors.white)),
-                subtitle: Text("Usage Count: ${language.count}",
-                    style: const TextStyle(color: Colors.white70)),
-              );
-            }),
-          ],
+          ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 30,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildRepositoriesSlide(GitHubData data) {
-    return SingleChildScrollView(
-      child: Container(
-        color: Colors.teal,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Repositories you worked on this year!",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-            ...data.reposIn2024.map((repo) {
-              return ListTile(
-                title: Text(repo.name,
-                    style: const TextStyle(color: Colors.white)),
-                subtitle: Text(
-                  "Stars: ${repo.stargazerCount} | Forks: ${repo.forkCount}",
-                  style: const TextStyle(color: Colors.white70),
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Container(
+            color: Colors.teal,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Repositories you worked on this year!",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
-              );
-            }),
-          ],
+                const SizedBox(height: 20),
+                ...data.reposIn2024.map((repo) {
+                  return ListTile(
+                    title: Text(repo.name,
+                        style: const TextStyle(color: Colors.white)),
+                    subtitle: Text(
+                      "Stars: ${repo.stargazerCount} | Forks: ${repo.forkCount}",
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        // Align(
+        //   alignment: Alignment.bottomRight,
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(16.0),
+        //     child: Icon(
+        //       Icons.arrow_forward,
+        //       size: 30,
+        //       color: Colors.white.withOpacity(0.7),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
   }
 
   Widget _buildStreakSlide(GitHubData data) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.local_fire_department,
-                size: 80, color: Colors.white),
-            const SizedBox(height: 20),
-            const Text(
-              "Longest Streak",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
+    return Stack(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(colors: [Colors.red, Colors.orange]),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.local_fire_department,
+                    size: 80, color: Colors.white),
+                const SizedBox(height: 20),
+                const Text(
+                  "Longest Streak",
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "${data.longestStreak} days",
+                  style: const TextStyle(fontSize: 18, color: Colors.white70),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            Text(
-              "${data.longestStreak} days",
-              style: const TextStyle(fontSize: 18, color: Colors.white70),
-            ),
-          ],
+          ),
         ),
-      ),
+        // Scroll Direction Indicator (Arrow)
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(
+              Icons.arrow_forward,
+              size: 30,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
